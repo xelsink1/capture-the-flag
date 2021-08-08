@@ -98,17 +98,17 @@ def list_players():
         "heigth": 40
     })
 
-@app.route('/api/map')
-def get_map():
-
-    M = [
-        [0, 0, 0, 0],
-        [1, 0, 0, 0],
-        [1, 0, 0, 0],
-        [0, 0, 1, 0],
-    ]
-
-    return jsonify(M)
+# @app.route('/api/map')
+# def get_map():
+#
+#     M = [
+#         [0, 0, 0, 0],
+#         [1, 0, 0, 0],
+#         [1, 0, 0, 0],
+#         [0, 0, 1, 0],
+#     ]
+#
+#     return jsonify(M)
 
 
 app.run(HOST, PORT, debug=DEBUG)
