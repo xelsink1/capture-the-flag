@@ -112,6 +112,7 @@ class Bullet(db.Model):
         }
 
 
+def map_
 def map_generator(height, width):
     def printMaze(maze):
         maze[height // 2][width // 2] = 'F'
@@ -325,10 +326,12 @@ def init_map():
     Player.query.delete()
     Bullet.query.delete()
     m = map_generator(32, 32)
+    print(m)
     for i in range(len(m)):
+        print(m[i])
         for j in range(len(m[i])):
             if m[i][j] == ".":
-                add_object("ground", i, j)
+                continue
             elif m[i][j] == "#":
                 add_object("wall", i, j)
             elif m[i][j] == "F":
@@ -339,9 +342,7 @@ def init_map():
                 add_object("ammo", i, j)
             elif m[i][j] == "B":
                 add_base(i, j, random.choice(["#00FF00", "#FF0000", "#0000FF", "#FFFF00"]))
-            else:
-                abort(400)
-        return "heh"
+    return "heh"
 
 
 def add_object(hype, x, y):
