@@ -1,19 +1,24 @@
 import random
 from colorama import init
-from colorama import Fore, Back, Style
 
 
 def printMaze(maze):
     for i in range(0, height):
         for j in range(0, width):
+
+            maze[height // 2][width // 2] = 'F'
+            maze[0][width - 1] = maze[0][0] = maze[height - 1][0] = maze[height - 1][width - 1] = 'B'
+
             if (maze[i][j] == '2'):
-                print(str(maze[i][j]), end=" ")
+                print(str(maze[i][j]), end="")
             elif (maze[i][j] == '#'):
-                print(str(maze[i][j]), end=" ")
+                print(str(maze[i][j]), end="")
             else:
-                print(str(maze[i][j]), end=" ")
+                print(str(maze[i][j]), end="")
 
         print('\n')
+    maze[height // 2][width // 2] = 'F'
+    maze[0][width - 1] = maze[0][0] = maze[height - 1][0] = maze[height - 1][width - 1] = ''
 
 
 def surroundingCells(rand_wall):
@@ -212,6 +217,4 @@ for i in range(width - 1, 0, -1):
         maze[height - 1][i] = '.'
         break
 
-with open("map1.txt", "w") as txt_file:
-    for line in maze:
-        txt_file.write(" ".join(line) + "\n")
+printMaze(maze)
