@@ -2,7 +2,7 @@ from datetime import datetime
 import random
 import string
 
-from flask import Flask, jsonify, abort
+from flask import Flask, jsonify, abort, render_template
 from flask_sqlalchemy import SQLAlchemy
 from config import *
 from flask_migrate import Migrate
@@ -315,7 +315,7 @@ def map_generator(height, width):
 
 @app.route('/')
 def index():
-    return "Here I am!"
+    return render_template("game.html")
 
 
 @app.route('/test/init_map')
