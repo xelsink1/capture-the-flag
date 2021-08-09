@@ -23,13 +23,13 @@ def printMaze(maze):
 
 def surroundingCells(rand_wall):
     s_cells = 0
-    if (maze[rand_wall[0] - 1][rand_wall[1]] == 'c'):
+    if (maze[rand_wall[0] - 1][rand_wall[1]] == '.'):
         s_cells += 1
-    if (maze[rand_wall[0] + 1][rand_wall[1]] == 'c'):
+    if (maze[rand_wall[0] + 1][rand_wall[1]] == '.'):
         s_cells += 1
-    if (maze[rand_wall[0]][rand_wall[1] - 1] == 'c'):
+    if (maze[rand_wall[0]][rand_wall[1] - 1] == '.'):
         s_cells += 1
-    if (maze[rand_wall[0]][rand_wall[1] + 1] == 'c'):
+    if (maze[rand_wall[0]][rand_wall[1] + 1] == '.'):
         s_cells += 1
 
     return s_cells
@@ -38,8 +38,8 @@ def surroundingCells(rand_wall):
 wall = '#'
 cell = '.'
 unvisited = '2'
-height = 32
-width = 32
+height = 100
+width = 100
 maze = []
 
 init()
