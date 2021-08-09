@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from config import *
 from flask_migrate import Migrate
 
-app = Flask(__name__)
+app = Flask(__name__, instance_path="/home/dmitry/PycharmProjects/capture-the-flag/instance")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./database.db'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -118,9 +118,9 @@ def init_map():
     Bullet.query.delete()
 
     with open('maps/map1.txt') as map_file:
-        m = map_file.read().split('/n')
+        m = map_file.read().split('\n')
     for i in range(len(m)):
-        for j in range(len(m)):
+        for j in range(len(m[i].split(' '))):
             if m[i][j] == ".":
                 add_object("ground", i, j)
             elif m[i][j] == "#":
@@ -135,7 +135,7 @@ def init_map():
                 add_base(i, j, random.choice(["#00FF00", "#FF0000", "#0000FF", "#FFFF00"]))
             else:
                 abort(400)
-
+        return "heh"
     # str -> db
 
 

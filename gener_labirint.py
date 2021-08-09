@@ -212,4 +212,6 @@ for i in range(width - 1, 0, -1):
         maze[height - 1][i] = '.'
         break
 
-printMaze(maze)
+with open("map1.txt", "w") as txt_file:
+    for line in maze:
+        txt_file.write(" ".join(line) + "\n")
