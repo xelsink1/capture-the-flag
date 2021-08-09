@@ -2,7 +2,7 @@ import datetime
 import random
 import string
 
-from flask import Flask, jsonify, abort
+from flask import Flask, jsonify, abort, render_template
 from flask_sqlalchemy import SQLAlchemy
 from config import *
 from flask_migrate import Migrate
@@ -107,7 +107,7 @@ class Bullet(db.Model):
 
 @app.route('/')
 def index():
-    return "Here I am!"
+    return render_template("game.html")
 
 
 @app.route('/test/init_map')

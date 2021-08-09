@@ -2,3 +2,6 @@ flask
 flask_sqlalchemy
 Flask-Migrate
 flask_script
+flask_sqlalchemy
+Flask-Migrate
+flask_script
