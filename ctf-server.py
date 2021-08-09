@@ -1,7 +1,8 @@
+import datetime
 import random
 import string
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from config import *
 from flask_migrate import Migrate
@@ -10,20 +11,21 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./database.db'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-'''
-class User(db.Model):
-    __tablename__ = 'users'
+
+
+'''class User(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(100))
     username = db.Column(db.String(50), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     password_hash = db.Column(db.String(100), nullable=False)
     created_on = db.Column(db.DateTime(), default=datetime.utcnow)
-    updated_on = db.Column(db.DateTime(), default=datetime.utcnow,  onupdate=datetime.utcnow)
+    updated_on = db.Column(db.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __repr__(self):
-	    return "<{}:{}>".format(self.id, self.username)
-'''
+        return "<{}:{}>".format(self.id, self.username)'''
+
+
 class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     key = db.Column(db.String(32), unique=True, nullable=True)
@@ -108,43 +110,88 @@ def index():
     return "Here I am!"
 
 
-@app.route('/test/add_base')
-def add_base():
-    new_base = Base()
-    new_base.x = 0
-    new_base.y = 5
-    new_base.color = "#FFFFFF"
+@app.route('/test/init_map')
+def init_map():
+    Base.query.delete()
+    Object.query.delete()
+    Player.query.delete()
+    Bullet.query.delete()
 
+    with open('maps/map1.txt') as map_file:
+        m = map_file.read().split('/n')
+    for i in range(len(m)):
+        for j in range(len(m)):
+            if m[i][j] == ".":
+                add_object("ground", i, j)
+            elif m[i][j] == "#":
+                add_object("wall", i, j)
+            elif m[i][j] == "F":
+                add_object("flag", i, j)
+            elif m[i][j] == "H":
+                add_object("medkit", i, j)
+            elif m[i][j] == "A":
+                add_object("ammo", i, j)
+            elif m[i][j] == "B":
+                add_base(i, j, random.choice(["#00FF00", "#FF0000", "#0000FF", "#FFFF00"]))
+            else:
+                abort(400)
+
+    # str -> db
+
+
+def add_object(hype, x, y):
+    new_object = Object()
+    new_object.type = hype
+    if hype == "wall":
+        new_object.hp = 3
+    else:
+        new_object.hp = 0
+    new_object.x = x
+    new_object.y = y
+    db.session.add(new_object)
+    db.session.commit()
+
+
+# @app.route('/test/add_base')
+def add_base(x, y, color):
+    new_base = Base()
+    new_base.x = x
+    new_base.y = y
+    new_base.color = color
     db.session.add(new_base)
     db.session.commit()
 
-    return "created base"
 
-
-@app.route('/test/add_player')
-def add_player():
+# @app.route('/test/add_player')
+def add_player(base_id):
     bases = Base.query.all()
-
     new_player = Player()
-    new_player.base = bases[0]
+    new_player.base = bases[base_id]
     new_player.key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-    new_player.x = bases[0].x
-    new_player.y = bases[0].y
-
+    new_player.x = bases[base_id].x
+    new_player.y = bases[base_id].y
     db.session.add(new_player)
     db.session.commit()
 
-    return "added_player"
+
+# def move_player(player_id, x, y):
+#
+@app.after_request
+def apply_caching(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
 
 
 @app.route('/api/state')
 def get_state():
+    # users = list(User.query.all())
     players = list(Player.query.all())
     objects = list(Object.query.all())
     bases = list(Base.query.all())
     bullets = list(Bullet.query.all())
 
     return jsonify({
+        # "users": [user.as_dict() for user in users],
         "players": [player.as_dict() for player in players],
         "objects": [object1.as_dict() for object1 in objects],
         "bases": [base.as_dict() for base in bases],
