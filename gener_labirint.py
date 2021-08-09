@@ -9,16 +9,6 @@ def printMaze(maze):
             maze[height // 2][width // 2] = 'F'
             maze[0][width - 1] = maze[0][0] = maze[height - 1][0] = maze[height - 1][width - 1] = 'B'
 
-#             if (maze[i][j] == '2'):
-#                 print(str(maze[i][j]), end="")
-#             elif (maze[i][j] == '#'):
-#                 print(str(maze[i][j]), end="")
-#             else:
-#                 print(str(maze[i][j]), end="")
-
-#         print('\n')
-#     maze[height // 2][width // 2] = 'F'
-#     maze[0][width - 1] = maze[0][0] = maze[height - 1][0] = maze[height - 1][width - 1] = 'B'
 
 
 def surroundingCells(rand_wall):
