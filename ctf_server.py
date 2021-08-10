@@ -421,8 +421,6 @@ def apply_caching(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
-
-@app.route('/api/state')
 def get_state():
     users = list(User.query.all())
     players = list(Player.query.all())
@@ -430,7 +428,7 @@ def get_state():
     bases = list(Base.query.all())
     bullets = list(Bullet.query.all())
 
-    return jsonify({
+    return {
         "users": [user.as_dict() for user in users],
         "players": [player.as_dict() for player in players],
         "objects": [object1.as_dict() for object1 in objects],
@@ -438,8 +436,11 @@ def get_state():
         "bullets": [bullet.as_dict() for bullet in bullets],
         "width": 32,
         "height": 32
-    })
+    }
 
+@app.route('/api/state')
+def web_get_state():
+    return jsonify(get_state())
 
 if __name__ == "__main__":
     app.run(HOST, PORT, debug=DEBUG)

@@ -29,12 +29,14 @@ if __name__ == "__main__":
         while True:
             state = get_state()
             choices = {}
-            objects = state(key="objects")
+            objects = state["objects"]
+
 
             for player in active_players:
                 choices[player.id] = get_choice(player, state)
 
-            for player in active_players:
+            for i, player in active_players:
+
                 if choices[player.id] == "go_up":
                     if player.y != 0 and objects:
                         player.y -= 1
