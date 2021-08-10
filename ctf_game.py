@@ -37,6 +37,7 @@ if __name__ == "__main__":
                 if choices[player.id] == "go_up":
                     if player.y != 0:
                         player.y -= 1
+                    player.side = "up"
                 if choices[player.id] == "go_down":
                     if player.y < 32:
                         player.y += 1
@@ -50,5 +51,5 @@ if __name__ == "__main__":
                 print("Player {} is on ({}, {})".format(player.id, player.x, player.y))
 
             db.session.commit()
-            time.sleep(0.5)
+            time.sleep(1)
             print(" - - " * 10)
