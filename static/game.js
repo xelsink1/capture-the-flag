@@ -10,8 +10,21 @@ images.grass.src = "/static/res/grass_new.jpg";
 images.base = new Image();
 images.base.src = "/static/res/base.jpg";
 
-images.player = new Image();
-images.player.src = "/static/res/PEPPA.jpg";
+
+images.player_UP = new Image();
+images.player_UP.src = "/static/res/player_UP.jpg";
+
+images.player_DOWN = new Image();
+images.player_DOWN.src = "/static/res/player_DOWN.jpg";
+
+images.player_RIGHT = new Image();
+images.player_RIGHT.src = "/static/res/player_RIGHT.jpg";
+
+images.player_LEFT = new Image();
+images.player_LEFT.src = "/static/res/player_LEFT.jpg";
+
+
+
 
 function drawGrass(){    
     for (var i = 0; i < 32; i++){
@@ -21,7 +34,7 @@ function drawGrass(){
     }
 }
 
-function game_loop_iteration()
+function game_loop_iteration()  
 {
     if (!data) return
     drawGrass()
@@ -31,9 +44,7 @@ function game_loop_iteration()
         }
     })
     data['bases'].forEach((base) => {
-        if (base['type'] == 'bases') {
-            drawBase(base['x'], base['y'])
-        }   
+        drawBase(base['x'], base['y'])  
     })
     data['players'].forEach((player) => {
         drawPlayer(player['x'], player['y'])
@@ -50,12 +61,19 @@ function drawBase(x, y){
     return ctx.drawImage(images.base, x * 30, y * 30, 30, 30)
 }
 
-function drawPlayer(x, y){
-    return ctx.drawImage(images.player, x * 30, y * 30, 30, 30)
+function drawPlayer(x, y, side){
+    // if (side == "up")
+    //     return ctx.drawImage(images.player_UP, x * 30, y * 30, 30, 30)
+    // if (side == "down")
+    //     return ctx.drawImage(images.player_DOWN, x * 30, y * 30, 30, 30)
+    // if (side == "left")
+    //     return ctx.drawImage(images.player_LEFT, x * 30, y * 30, 30, 30)
+    // if (side == "right")
+    //     return ctx.drawImage(images.player_RIGHT, x * 30, y * 30, 30, 30)
+    // }
+    return ctx.drawImage(images.player_RIGHT, x * 30, y * 30, 30, 30)
 }
-
 // function drawBullet()
-
 // function drawPlayer(){
 // var ctx = canvas.getContext('2d')
 // var image = new Image();
@@ -75,7 +93,6 @@ function update_map(){
             data = answer
             game_loop_iteration()
             console.log(data)
-            
         });
 }
 
