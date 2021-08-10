@@ -346,14 +346,19 @@ def init_map():
     return "heh"
 
 
-def add_code(player_id):
-    players = Player.querry.all()
-    player = players[player_id]
-    code = player.as_dict(key="code")
-    code = code[0].decode('utf8').replace('exit()', '')
-    output_file = open("./bots/" + player + ".py", 'w')
-    output_file.write(code)
-    output_file.close()
+# def add_code(player_id):
+#     players = Player.querry.all()
+#     player = players[player_id]
+#     code = player.as_dict(key="code")
+#     code = code[0].decode('utf8').replace('exit()', '')
+#     output_file = open("./bots/" + player + ".py", 'w')
+#     output_file.write(code)
+#     output_file.close()
+#     try:
+#         module = __import__(player, fromlist=["make_choice"])
+#         module = imp.reload(module)
+#         makeChoice = getattr(module, "make_choice")
+
 
 
 def add_object(hype, x, y):
@@ -379,7 +384,17 @@ def add_base(x, y, color):
     db.session.commit()
 
 
-# @app.route('/test/add_player')
+@app.route('/test/add_player')
+def web_add_player():
+    bases = Base.query.all()
+
+    for base in bases:
+        if len(base.players) == 0:
+            add_player(base.id)
+            return "ok"
+
+    return "no base"
+
 def add_player(base_id):
     bases = Base.query.all()
     new_player = Player()
@@ -423,5 +438,5 @@ def get_state():
         "height": 32
     })
 
-
-app.run(HOST, PORT, debug=DEBUG)
+if __name__ == "__main__":
+    app.run(HOST, PORT, debug=DEBUG)
