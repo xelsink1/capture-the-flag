@@ -21,11 +21,10 @@ function drawGrass(){
     }
 }
 
-simages.grass.onload = drawGrass
-
 function game_loop_iteration()
 {
     if (!data) return
+    drawGrass()
     data['objects'].forEach((object) => {
         if (object['type'] == 'wall') {
             drawStone(object['x'], object['y'])
@@ -52,7 +51,7 @@ function drawBase(x, y){
 }
 
 function drawPlayer(x, y){
-    return ctx.drawImage(images.player, x, y, 30, 30)
+    return ctx.drawImage(images.player, x * 30, y * 30, 30, 30)
 }
 
 // function drawBullet()
