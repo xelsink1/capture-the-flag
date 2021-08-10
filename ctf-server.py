@@ -116,10 +116,7 @@ def map_
 def map_generator(height, width):
     def printMaze(maze):
         maze[height // 2][width // 2] = 'F'
-        for i in range(height):
-            for j in range(width):
-                if (i == 0 or j == 0 or i == height - 1 or j = width - 1):
-                    maze[i][j] = '#'
+        maze[0][width - 1] = maze[0][0] = maze[height - 1][0] = maze[height - 1][width - 1] = '#'
         maze[1][width - 2] = maze[1][1] = maze[height - 2][1] = maze[height - 2][width - 2] = 'B'
 
     def surroundingCells(rand_wall):
