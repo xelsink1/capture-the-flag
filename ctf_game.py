@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
             for player in active_players:
                 if choices[player.id] == "go_up":
-                    if player.y != 0 and :
+                    if player.y != 0:
                         player.y -= 1
                     player.side = "up"
                 if choices[player.id] == "go_down":
