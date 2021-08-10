@@ -51,6 +51,7 @@ class Player(db.Model):
     def as_dict(self):
         return {
             "id": self.id,
+            "code": self.code,
             "hp": self.hp,
             "bullets": self.bullets,
             "has_flag": self.has_flag,
@@ -112,7 +113,6 @@ class Bullet(db.Model):
         }
 
 
-def map_
 def map_generator(height, width):
     def printMaze(maze):
         maze[height // 2][width // 2] = 'F'
@@ -346,6 +346,16 @@ def init_map():
     return "heh"
 
 
+def add_code(player_id):
+    players = Player.querry.all()
+    player = players[player_id]
+    code = player.as_dict(key="code")
+    code = code[0].decode('utf8').replace('exit()', '')
+    output_file = open("./bots/" + player + ".py", 'w')
+    output_file.write(code)
+    output_file.close()
+
+
 def add_object(hype, x, y):
     new_object = Object()
     new_object.type = hype
@@ -381,8 +391,14 @@ def add_player(base_id):
     db.session.commit()
 
 
-# def move_player(player_id, x, y):
-#
+def move_player(player_id, x, y):
+    players = Player.querry.all()
+    player = players[player_id]
+    player.x = x
+    player.y = y
+    db.session.commit()
+
+
 @app.after_request
 def apply_caching(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
