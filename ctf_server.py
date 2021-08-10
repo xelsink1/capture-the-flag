@@ -44,8 +44,7 @@ class Player(db.Model):
     y = db.Column(db.Integer, nullable=True, default=0)
     side = db.Column(db.String(6), default="up")
     inventory = db.Column(db.JSON, nullable=True)
-    base_id = db.Column(db.Integer, db.ForeignKey('base.id'),
-                        nullable=True)
+    base_id = db.Column(db.Integer, db.ForeignKey('base.id'), nullable=True)
     base = db.relationship('Base', backref=db.backref('players', lazy=True))
 
     def as_dict(self):
@@ -363,7 +362,6 @@ def init_map():
 #         makeChoice = getattr(module, "make_choice")
 
 
-
 def add_object(hype, x, y):
     new_object = Object()
     new_object.type = hype
@@ -397,6 +395,7 @@ def web_add_player():
             return "ok"
 
     return "no base"
+
 
 def add_player(base_id):
     bases = Base.query.all()
@@ -440,6 +439,7 @@ def get_state():
         "width": 32,
         "height": 32
     })
+
 
 if __name__ == "__main__":
     app.run(HOST, PORT, debug=DEBUG)
