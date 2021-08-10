@@ -11,7 +11,7 @@ images.base = new Image();
 images.base.src = "/static/res/base.jpg";
 
 images.player = new Image();
-images.player.src = "/static/res/player.jpg";
+images.player.src = "/static/res/PEPPA.jpg";
 
 function drawGrass(){    
     for (var i = 0; i < 32; i++){
