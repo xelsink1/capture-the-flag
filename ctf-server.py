@@ -111,17 +111,16 @@ class Bullet(db.Model):
             "type": self.type,
         }
 
-def fkf():
-    player = Player.querry.all()
-    code =
-    code = code[0].decode('utf8').replace('exit()', '')
-    output_file = open("./bots/" + player + ".py", 'w')
-    output_file.write(code)
-    output_file.close()
+
+def map_
 def map_generator(height, width):
     def printMaze(maze):
         maze[height // 2][width // 2] = 'F'
-        maze[0][width - 1] = maze[0][0] = maze[height - 1][0] = maze[height - 1][width - 1] = 'B'
+        for i in range(height):
+            for j in range(width):
+                if (i == 0 or j == 0 or i == height - 1 or j = width - 1):
+                    maze[i][j] = '#'
+        maze[1][width - 2] = maze[1][1] = maze[height - 2][1] = maze[height - 2][width - 2] = 'B'
 
     def surroundingCells(rand_wall):
         s_cells = 0
@@ -385,13 +384,8 @@ def add_player(base_id):
     db.session.commit()
 
 
-def move_player(player_id, x, y):
-    players = Player.querry.all()
-    player = players[player_id]
-    player.x = x
-    player.y = y
-    db.session.commit()
-
+# def move_player(player_id, x, y):
+#
 @app.after_request
 def apply_caching(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
