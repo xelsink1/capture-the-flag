@@ -4,6 +4,7 @@ from ctf_server import app, Player, get_state, db
 
 available_choices = ["go_up", "go_down", "go_right", "go_left", "fire_up", "fire_down", "fire_right", "fire_left"]
 
+
 def get_choice(player, state):
     try:
         location_module = importlib.import_module("bots.bot_{}".format(player.id))
@@ -15,6 +16,14 @@ def get_choice(player, state):
     except Exception as e:
         print(e)
         return None
+
+
+def is_it_a_wall(objects, x, y):
+    for obj in objects:
+        if (obj["y"] == y) and (obj["x"] == x) and (obj["type"] == "wall"):
+            return True
+    return False
+
 
 if __name__ == "__main__":
     with app.app_context():
@@ -31,25 +40,26 @@ if __name__ == "__main__":
             choices = {}
             objects = state["objects"]
 
-
             for player in active_players:
                 choices[player.id] = get_choice(player, state)
 
-            for i, player in active_players:
-
+            for player in active_players:
                 if choices[player.id] == "go_up":
-                    if player.y != 0 and objects:
+                    if not is_it_a_wall(objects, player.x, (player.y - 1)) and (player.y != 0):
                         player.y -= 1
                     player.side = "up"
                 if choices[player.id] == "go_down":
-                    if player.y < 32:
+                    if not is_it_a_wall(objects, player.x, (player.y + 1)) and (player.y < 32):
                         player.y += 1
+                    player.side = "down"
                 if choices[player.id] == "go_left":
-                    if player.x > 0:
+                    if not is_it_a_wall(objects, (player.x - 1), player.y) and (player.x != 0):
                         player.x -= 1
+                    player.side = "left"
                 if choices[player.id] == "go_right":
-                    if player.x < 32:
+                    if not is_it_a_wall(objects, (player.x + 1), player.y) and (player.x < 32):
                         player.x += 1
+                    player.side = "right"
 
                 print("Player {} is on ({}, {})".format(player.id, player.x, player.y))
 
