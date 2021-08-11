@@ -22,17 +22,14 @@ images.player_RIGHT.src = "/static/res/player_RIGHT.jpg";
 images.player_LEFT = new Image();
 images.player_LEFT.src = "/static/res/player_LEFT.jpg";
 
-images.playerbullet_UP = new Image();
-images.bullet_UP.src = "/static/res/bullet_UP.jpg";
-images.bullet_DOWN = new Image();
-images.bullet_DOWN.src = "/static/res/bullet_DOWN.jpg";
-images.bullet_RIGHT = new Image();
-images.bullet_RIGHT.src = "/static/res/bullet_RIGHT.jpg";
-images.bullet_LEFT = new Image();
-images.bullet_LEFT.src = "/static/res/bullet_LEFT.jpg";
-
-
-
+//images.player_UP = new Image();
+//images.bullet_UP.src = "/static/res/bullet_UP.png";
+//images.bullet_DOWN = new Image();
+//images.bullet_DOWN.src = "/static/res/bullet_DOWN.png";
+//images.bullet_RIGHT = new Image();
+//images.bullet_RIGHT.src = "/static/res/bullet_RIGHT.png";
+//images.bullet_LEFT = new Image();
+//images.bullet_LEFT.src = "/static/res/bullet_LEFT.png";
 
 
 
