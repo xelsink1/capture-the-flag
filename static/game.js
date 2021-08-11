@@ -57,7 +57,7 @@ function game_loop_iteration()
         drawBase(base['x'], base['y'])  
     })
     data['players'].forEach((player) => {
-        drawPlayer(player['x'], player['y'])
+        drawPlayer(player['x'], player['y'], player['side'])
     })
 }
 
@@ -74,27 +74,33 @@ function drawBase(x, y){
 }
 
 function drawPlayer(x, y, side){
-    // if (side == "up")
-    //     return ctx.drawImage(images.player_UP, x * 30, y * 30, 30, 30)
-    // if (side == "down")
-    //     return ctx.drawImage(images.player_DOWN, x * 30, y * 30, 30, 30)
-    // if (side == "left")
-    //     return ctx.drawImage(images.player_LEFT, x * 30, y * 30, 30, 30)
-    // if (side == "right")
-    //     return ctx.drawImage(images.player_RIGHT, x * 30, y * 30, 30, 30)
-    // }
-    return ctx.drawImage(images.player_UP, x * 30, y * 30, 30, 30)
+     if (side == "up"){
+        return ctx.drawImage(images.player_UP, x * 30, y * 30, 30, 30)
+    }
+     if (side == "down"){
+        return ctx.drawImage(images.player_DOWN, x * 30, y * 30, 30, 30)
+    }
+     if (side == "left"){
+        return ctx.drawImage(images.player_LEFT, x * 30, y * 30, 30, 30)
+    }
+     if (side == "right"){
+        return ctx.drawImage(images.player_RIGHT, x * 30, y * 30, 30, 30)
+    }
 }
 
 function drawBullet(x, y, side){
-        if (side == "up")
+        if (side == "up"){
             return ctx.drawImage(images.bullet_UP, x * 30, y * 30, 30, 30)
-        if (side == "down")
+        }
+        if (side == "down"){
             return ctx.drawImage(images.bullet_DOWN, x * 30, y * 30, 30, 30)
-        if (side == "left")
+        }
+        if (side == "left"){
             return ctx.drawImage(images.bullet_LEFT, x * 30, y * 30, 30, 30)
-        if (side == "right")
+        }
+        if (side == "right"){
             return ctx.drawImage(images.bullet_RIGHT, x * 30, y * 30, 30, 30)
+        }
 }
 
 function drawWatermelon(x, y){
