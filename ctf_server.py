@@ -99,7 +99,6 @@ class Bullet(db.Model):
     y = db.Column(db.Integer, nullable=True, default=0)
     side = db.Column(db.String(6), default="up")
     speed = db.Column(db.Integer, nullable=False, default=2)
-    type = db.Column(db.String(10), default="ground")
 
     def as_dict(self):
         return {
@@ -107,8 +106,7 @@ class Bullet(db.Model):
             "x": self.x,
             "y": self.y,
             "side": self.side,
-            "speed": self.side,
-            "type": self.type,
+            "speed": self.side
         }
 
 

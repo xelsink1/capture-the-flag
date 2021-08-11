@@ -1,6 +1,6 @@
 import time
 import importlib
-from ctf_server import app, Player, get_state, db
+from ctf_server import app, Player, Object, Bullet, get_state, db
 
 available_choices = ["go_up", "go_down", "go_right", "go_left", "fire_up", "fire_down", "fire_right", "fire_left"]
 
@@ -18,11 +18,27 @@ def get_choice(player, state):
         return None
 
 
-def is_it_a_wall(objects, x, y):
-    for obj in objects:
-        if (obj["y"] == y) and (obj["x"] == x) and (obj["type"] == "wall"):
-            return True
-    return False
+def is_it_an_object(x, y, type):
+    state1 = get_state()
+    objects1 = state1["objects"]
+    for obj in objects1:
+        if (obj["y"] == y) and (obj["x"] == x) and (obj["type"] == type):
+            return obj
+    return None
+
+
+'''def bullet_launch(x, y, side):
+    state1 = get_state()
+    bullets1 = state["bullets"]
+    bullet = Bullet()
+    bullet.side = side
+    bullet.speed = 2
+    bullet.x = x
+    bullet.y = y
+    if side in ["up", "down"]:
+        while is_it_an_object(bullet.x, (bullet.y - 2), "wall"):
+            '''
+
 
 
 if __name__ == "__main__":
@@ -39,27 +55,38 @@ if __name__ == "__main__":
             state = get_state()
             choices = {}
             objects = state["objects"]
+            bullets = state["bullets"]
 
             for player in active_players:
                 choices[player.id] = get_choice(player, state)
 
             for player in active_players:
                 if choices[player.id] == "go_up":
-                    if not is_it_a_wall(objects, player.x, (player.y - 1)) and (player.y != 0):
+                    if not is_it_an_object(player.x, (player.y - 1), "wall") and (player.y != 0):
                         player.y -= 1
                     player.side = "up"
                 if choices[player.id] == "go_down":
-                    if not is_it_a_wall(objects, player.x, (player.y + 1)) and (player.y < 32):
+                    if not is_it_an_object(player.x, (player.y + 1), "wall") and (player.y < 32):
                         player.y += 1
                     player.side = "down"
                 if choices[player.id] == "go_left":
-                    if not is_it_a_wall(objects, (player.x - 1), player.y) and (player.x != 0):
+                    if not is_it_an_object((player.x - 1), player.y, "wall") and (player.x != 0):
                         player.x -= 1
                     player.side = "left"
                 if choices[player.id] == "go_right":
-                    if not is_it_a_wall(objects, (player.x + 1), player.y) and (player.x < 32):
+                    if not is_it_an_object((player.x + 1), player.y, "wall") and (player.x < 32):
                         player.x += 1
                     player.side = "right"
+
+                if is_it_an_object(player.x, player.y, "flag"):
+                    player.has_flag = True
+                '''if choices[player.id] == "fire_up":
+                    if is_it_an_object(player.x, (player.y - 1), "wall"):
+                        wall = is_it_an_object(player.x, (player.y - 1), "wall")
+                        if wall:
+                            wall.hp -= 1
+
+                if choices[player.id] == "fire_down":'''
 
                 print("Player {} is on ({}, {})".format(player.id, player.x, player.y))
 
