@@ -1,6 +1,6 @@
 import time
 import importlib
-from ctf_server import app, Player, Object, Bullet, get_state, db
+from ctf_server import app, Player, Bullet, get_state, db
 
 available_choices = ["go_up", "go_down", "go_right", "go_left", "fire_up", "fire_down", "fire_right", "fire_left"]
 
@@ -17,6 +17,14 @@ def get_choice(player, state):
         print(e)
         return None
 
+def is_it_a_player(x, y):
+    state1 = get_state()
+    players1 = state1["players"]
+    for pl in players1:
+        if (pl["y"] == y) and (pl["x"] == x) and (pl["type"] == type):
+            return pl
+    return None
+
 
 def is_it_an_object(x, y, type):
     state1 = get_state()
@@ -27,17 +35,33 @@ def is_it_an_object(x, y, type):
     return None
 
 
-'''def bullet_launch(x, y, side):
-    state1 = get_state()
-    bullets1 = state["bullets"]
+def bullet_launch(player, side):
     bullet = Bullet()
     bullet.side = side
     bullet.speed = 2
-    bullet.x = x
-    bullet.y = y
-    if side in ["up", "down"]:
-        while is_it_an_object(bullet.x, (bullet.y - 2), "wall"):
-            '''
+    if bullet.side == "up":
+        bullet.x = player.x
+        bullet.y = player.y - 1
+    if bullet.side == "down":
+        bullet.x = player.x
+        bullet.y = player.y + 1
+    if bullet.side == "right":
+        bullet.x = player.x + 1
+        bullet.y = player.y
+    if bullet.side == "left":
+        bullet.x = player.x - 1
+        bullet.y = player.y
+
+    while not is_it_an_object(bullet.x, bullet.y, "wall") and not is_it_a_player(bullet.x, bullet.y):
+        if bullet.side == "up":
+            bullet.y -= 1
+        if bullet.side == "down":
+            bullet.y += 1
+        if bullet.side == "right":
+            bullet.x += 1
+        if bullet.side == "left":
+            bullet.y -= 1
+        time.sleep(0.5)
 
 
 
@@ -80,13 +104,21 @@ if __name__ == "__main__":
 
                 if is_it_an_object(player.x, player.y, "flag"):
                     player.has_flag = True
-                '''if choices[player.id] == "fire_up":
+                if choices[player.id] == "fire_up":
                     if is_it_an_object(player.x, (player.y - 1), "wall"):
                         wall = is_it_an_object(player.x, (player.y - 1), "wall")
                         if wall:
                             wall.hp -= 1
 
-                if choices[player.id] == "fire_down":'''
+                if choices[player.id] == "fire_up":
+                    bullet_launch(player, "up")
+                if choices[player.id] == "fire_down":
+                    bullet_launch(player, "down")
+                if choices[player.id] == "fire_right":
+                    bullet_launch(player, "right")
+                if choices[player.id] == "fire_left":
+                    bullet_launch(player, "left")
+
 
                 print("Player {} is on ({}, {})".format(player.id, player.x, player.y))
 
