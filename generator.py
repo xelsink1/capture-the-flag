@@ -1,4 +1,5 @@
 import random
+from colorama import init
 
 
 def map_generator(height, width):

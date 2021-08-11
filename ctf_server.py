@@ -6,7 +6,7 @@ from flask import Flask, jsonify, abort, render_template
 from flask_sqlalchemy import SQLAlchemy
 from config import *
 from flask_migrate import Migrate
-from colorama import init
+
 from generator import map_generator
 
 app = Flask(__name__, instance_path="/home/dmitry/PycharmProjects/capture-the-flag/instance")
