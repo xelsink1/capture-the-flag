@@ -102,15 +102,15 @@ if __name__ == "__main__":
                         player.x += 1
                     player.side = "right"
 
-                '''if is_it_an_object(player.x, player.y, "flag"):
+                if is_it_an_object(player.x, player.y, "flag"):
                     player.has_flag = True
                 if choices[player.id] == "fire_up":
                     if is_it_an_object(player.x, (player.y - 1), "wall"):
                         wall = is_it_an_object(player.x, (player.y - 1), "wall")
                         if wall:
-                            wall.hp -= 1'''
+                            wall.hp -= 1
 
-'''                if choices[player.id] == "fire_up":
+                if choices[player.id] == "fire_up":
                     bullet_launch(player, "up")
                 if choices[player.id] == "fire_down":
                     bullet_launch(player, "down")
@@ -118,7 +118,7 @@ if __name__ == "__main__":
                     bullet_launch(player, "right")
                 if choices[player.id] == "fire_left":
                     bullet_launch(player, "left")
-'''
+
                 print("Player {} is on ({}, {})".format(player.id, player.x, player.y))
 
             db.session.commit()
