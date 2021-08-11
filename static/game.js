@@ -8,10 +8,30 @@ images.grass = new Image();
 images.grass.src = "/static/res/grass_new.jpg";
 
 images.base = new Image();
-images.base.src = "/static/res/base.jpg";
+images.base.src = "/static/res/base.png";
 
-images.player = new Image();
-images.player.src = "/static/res/PEPPA.jpg";
+images.watermelon = new Image();
+images.watermelon.src = "/static/res/watermelon.png"
+
+images.player_UP = new Image();
+images.player_UP.src = "/static/res/player_UP.jpg";
+images.player_DOWN = new Image();
+images.player_DOWN.src = "/static/res/player_DOWN.jpg";
+images.player_RIGHT = new Image();
+images.player_RIGHT.src = "/static/res/player_RIGHT.jpg";
+images.player_LEFT = new Image();
+images.player_LEFT.src = "/static/res/player_LEFT.jpg";
+
+//images.player_UP = new Image();
+//images.bullet_UP.src = "/static/res/bullet_UP.png";
+//images.bullet_DOWN = new Image();
+//images.bullet_DOWN.src = "/static/res/bullet_DOWN.png";
+//images.bullet_RIGHT = new Image();
+//images.bullet_RIGHT.src = "/static/res/bullet_RIGHT.png";
+//images.bullet_LEFT = new Image();
+//images.bullet_LEFT.src = "/static/res/bullet_LEFT.png";
+
+
 
 function drawGrass(){    
     for (var i = 0; i < 32; i++){
@@ -21,7 +41,7 @@ function drawGrass(){
     }
 }
 
-function game_loop_iteration()
+function game_loop_iteration()  
 {
     if (!data) return
     drawGrass()
@@ -29,16 +49,19 @@ function game_loop_iteration()
         if (object['type'] == 'wall') {
             drawStone(object['x'], object['y'])
         }
+        // if (object['type'] == 'flag') {
+        //     drawWatermelon(object['x'], object['y'])
+        // } 
     })
     data['bases'].forEach((base) => {
-        if (base['type'] == 'bases') {
-            drawBase(base['x'], base['y'])
-        }   
+        drawBase(base['x'], base['y'])  
     })
     data['players'].forEach((player) => {
         drawPlayer(player['x'], player['y'])
     })
 }
+
+
 
 
 // функции по отрисовке
@@ -50,20 +73,34 @@ function drawBase(x, y){
     return ctx.drawImage(images.base, x * 30, y * 30, 30, 30)
 }
 
-function drawPlayer(x, y){
-    return ctx.drawImage(images.player, x * 30, y * 30, 30, 30)
+function drawPlayer(x, y, side){
+    // if (side == "up")
+    //     return ctx.drawImage(images.player_UP, x * 30, y * 30, 30, 30)
+    // if (side == "down")
+    //     return ctx.drawImage(images.player_DOWN, x * 30, y * 30, 30, 30)
+    // if (side == "left")
+    //     return ctx.drawImage(images.player_LEFT, x * 30, y * 30, 30, 30)
+    // if (side == "right")
+    //     return ctx.drawImage(images.player_RIGHT, x * 30, y * 30, 30, 30)
+    // }
+    return ctx.drawImage(images.player_UP, x * 30, y * 30, 30, 30)
 }
 
-// function drawBullet()
+function drawBullet(x, y, side){
+        if (side == "up")
+            return ctx.drawImage(images.bullet_UP, x * 30, y * 30, 30, 30)
+        if (side == "down")
+            return ctx.drawImage(images.bullet_DOWN, x * 30, y * 30, 30, 30)
+        if (side == "left")
+            return ctx.drawImage(images.bullet_LEFT, x * 30, y * 30, 30, 30)
+        if (side == "right")
+            return ctx.drawImage(images.bullet_RIGHT, x * 30, y * 30, 30, 30)
+}
 
-// function drawPlayer(){
-// var ctx = canvas.getContext('2d')
-// var image = new Image();
-// image.src = "/static/res/red_square.jpg";  
-// image.onload = function (){
-//     ctx.drawImage(image, 510, 300, 30, 30)
-//     }
-// }
+function drawWatermelon(x, y){
+    return ctx.drawImage(images)
+}
+
 
 
 function update_map(){
@@ -75,7 +112,6 @@ function update_map(){
             data = answer
             game_loop_iteration()
             console.log(data)
-            
         });
 }
 
