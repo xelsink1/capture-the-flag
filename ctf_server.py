@@ -110,10 +110,6 @@ class Bullet(db.Model):
         }
 
 
-import random
-from colorama import init
-
-
 def map_generator(height, width):
     def fak_generation(maze):
         next = []
@@ -375,7 +371,7 @@ def init_map():
             elif m[i][j] == "F":
                 add_object("flag", i, j)
             elif m[i][j] == "H":
-                add_object("medkit", i, j)
+                add_object("f.a.k", i, j)
             elif m[i][j] == "A":
                 add_object("ammo", i, j)
             elif m[i][j] == "B":
