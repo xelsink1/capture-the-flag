@@ -110,14 +110,47 @@ class Bullet(db.Model):
         }
 
 
+import random
+from colorama import init
+
+
 def map_generator(height, width):
-    def printMaze(maze):
+    def fak_generation(maze):
+        next = []
+        for i in range(height):
+            for j in range(width):
+                if (maze[i][j] == '.'):
+                    next.append([i, j])
+
+        for i in range(4):
+            f = random.randint(0, len(next) - 1)
+            i1 = next[f][0]
+            i2 = next[f][1]
+            maze[i1][i2] = 'H'
+            next.remove([i1, i2])
+
+        for i in range(4):
+            f = random.randint(0, len(next) - 1)
+            i1 = next[f][0]
+            i2 = next[f][1]
+            maze[i1][i2] = 'A'
+            next.remove([i1, i2])
+
+
+    def creatMaze(maze):
         maze[height // 2][width // 2] = 'F'
-        for i in range (height):
-            for j in range (width):
+        for i in range(height):
+            for j in range(width):
                 if (i == 0 or j == 0 or i == height - 1 or j == width - 1):
                     maze[i][j] = '#'
         maze[1][width - 2] = maze[1][1] = maze[height - 2][1] = maze[height - 2][width - 2] = 'B'
+
+
+    def printMaze(maze):
+        for i in range(height):
+            for j in range(width):
+                print(maze[i][j], end=" ")
+            print("\n")
 
     def surroundingCells(rand_wall):
         s_cells = 0
@@ -132,6 +165,7 @@ def map_generator(height, width):
 
         return s_cells
 
+    wall = '#'
     cell = '.'
     unvisited = '2'
     maze = []
@@ -310,9 +344,12 @@ def map_generator(height, width):
         if (maze[height - 2][i] == '.'):
             maze[height - 1][i] = '.'
             break
-    printMaze(maze)
+
+    fak_generation(maze)
+    creatMaze(maze)
 
     return maze
+
 
 
 @app.route('/')
