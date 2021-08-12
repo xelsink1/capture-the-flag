@@ -6,10 +6,8 @@ from flask import Flask, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from config import *
 from flask_migrate import Migrate
-from werkzeug.security import generate_password_hash, check_password_hash
 
 from generator import map_generator
-from example_bot import make_choice
 
 app = Flask(__name__, instance_path="/home/dmitry/PycharmProjects/capture-the-flag/instance")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./database.db'
@@ -55,7 +53,7 @@ class Player(db.Model):
     key = db.Column(db.String(32), unique=True, nullable=True)
     code = db.Column(db.Text, nullable=True)
     hp = db.Column(db.Integer, nullable=False, default=3)
-    bullets = db.Column(db.Integer, nullable=False, default=0)
+    bullets = db.Column(db.Integer, nullable=False, default=99)
     has_flag = db.Column(db.Boolean, nullable=False, default=False)
     x = db.Column(db.Integer, nullable=True, default=0)
     y = db.Column(db.Integer, nullable=True, default=0)
@@ -123,7 +121,7 @@ class Bullet(db.Model):
             "x": self.x,
             "y": self.y,
             "side": self.side,
-            "speed": self.side
+            "speed": self.speed
         }
 
 
@@ -212,7 +210,7 @@ def add_player(base_id):
     new_player = Player()
     new_player.base = bases[base_id]
     new_player.key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-    new_player.code = make_choice(1, 1)
+    new_player.code = open('examples/example_bot.py').read()
     new_player.x = bases[base_id].x
     new_player.y = bases[base_id].y
     db.session.add(new_player)

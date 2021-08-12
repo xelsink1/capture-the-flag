@@ -37,39 +37,26 @@ def is_it_an_object(x, y, hype):
 
 
 def bullet_launch(player1, side):
-    bullet = Bullet()
-    bullet.side = side
-    if bullet.side == "up":
-        bullet.x = player1.x
-        bullet.y = player1.y - 1
-    if bullet.side == "down":
-        bullet.x = player1.x
-        bullet.y = player1.y + 1
-    if bullet.side == "right":
-        bullet.x = player1.x + 1
-        bullet.y = player1.y
-    if bullet.side == "left":
-        bullet.x = player1.x - 1
-        bullet.y = player1.y
-    db.session.add(bullet)
-    db.session.commit()
-
-    while not is_it_an_object(bullet.x, bullet.y, "wall") and not is_it_a_player(bullet.x, bullet.y):
+    if player1.bullets != 0:
+        bullet = Bullet()
+        bullet.side = side
+        player1.bullets -= 1
         if bullet.side == "up":
-            bullet.y -= 1
+            bullet.x = player1.x
+            bullet.y = player1.y - 1
         if bullet.side == "down":
-            bullet.y += 1
+            bullet.x = player1.x
+            bullet.y = player1.y + 1
         if bullet.side == "right":
-            bullet.x += 1
+            bullet.x = player1.x + 1
+            bullet.y = player1.y
         if bullet.side == "left":
-            bullet.y -= 1
-        time.sleep(0.5)
-    wall = is_it_an_object(bullet.x, bullet.y, "wall")
-    if wall:
-        wall["hp"] -= 1
-    play = is_it_an_object(bullet.x, bullet.y, "wall")
-    if play:
-        play["hp"] -= 1
+            bullet.x = player1.x - 1
+            bullet.y = player1.y
+        db.session.add(bullet)
+        db.session.commit()
+    else:
+        return None
 
 
 if __name__ == "__main__":
@@ -86,10 +73,32 @@ if __name__ == "__main__":
             state = get_state()
             choices = {}
             objects = state["objects"]
-            bullets = state["bullets"]
+            bullets = Bullet.query.all()
 
             for player in active_players:
                 choices[player.id] = get_choice(player, state)
+
+            for bullet in bullets:
+                while not is_it_an_object(bullet.x, bullet.y, "wall") and not is_it_a_player(bullet.x, bullet.y):
+                    if bullet.side == "up":
+                        bullet.y -= 1
+                    if bullet.side == "down":
+                        bullet.y += 1
+                    if bullet.side == "right":
+                        bullet.x += 1
+                    if bullet.side == "left":
+                        bullet.y -= 1
+                wall = is_it_an_object(bullet.x, bullet.y, "wall")
+                if wall:
+                    wall["hp"] -= 1
+                    if wall["hp"] == 0:
+                        db.session.delete(wall)
+                    db.session.delete(bullet)
+
+                play = is_it_a_player(bullet.x, bullet.y)
+                if play:
+                    play["hp"] -= 1
+                    db.session.delete(bullet)
 
             for player in active_players:
                 if choices[player.id] == "go_up":
