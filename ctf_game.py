@@ -22,36 +22,37 @@ def is_it_a_player(x, y):
     state1 = get_state()
     players1 = state1["players"]
     for pl in players1:
-        if (pl["y"] == y) and (pl["x"] == x) and (pl["type"] == type):
+        if (pl["y"] == y) and (pl["x"] == x):
             return pl
     return None
 
 
-def is_it_an_object(x, y, type):
+def is_it_an_object(x, y, hype):
     state1 = get_state()
     objects1 = state1["objects"]
     for obj in objects1:
-        if (obj["y"] == y) and (obj["x"] == x) and (obj["type"] == type):
+        if (obj["y"] == y) and (obj["x"] == x) and (obj["type"] == hype):
             return obj
     return None
 
 
-def bullet_launch(player, side):
+def bullet_launch(player1, side):
     bullet = Bullet()
     bullet.side = side
-    bullet.speed = 2
     if bullet.side == "up":
-        bullet.x = player.x
-        bullet.y = player.y - 1
+        bullet.x = player1.x
+        bullet.y = player1.y - 1
     if bullet.side == "down":
-        bullet.x = player.x
-        bullet.y = player.y + 1
+        bullet.x = player1.x
+        bullet.y = player1.y + 1
     if bullet.side == "right":
-        bullet.x = player.x + 1
-        bullet.y = player.y
+        bullet.x = player1.x + 1
+        bullet.y = player1.y
     if bullet.side == "left":
-        bullet.x = player.x - 1
-        bullet.y = player.y
+        bullet.x = player1.x - 1
+        bullet.y = player1.y
+    db.session.add(bullet)
+    db.session.commit()
 
     while not is_it_an_object(bullet.x, bullet.y, "wall") and not is_it_a_player(bullet.x, bullet.y):
         if bullet.side == "up":
@@ -108,7 +109,7 @@ if __name__ == "__main__":
                     if is_it_an_object(player.x, (player.y - 1), "wall"):
                         wall = is_it_an_object(player.x, (player.y - 1), "wall")
                         if wall:
-                            wall.hp -= 1
+                            wall["hp"] -= 1
 
                 if choices[player.id] == "fire_up":
                     bullet_launch(player, "up")

@@ -2,12 +2,14 @@ from datetime import datetime
 import random
 import string
 
-from flask import Flask, jsonify, abort, render_template
+from flask import Flask, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from config import *
 from flask_migrate import Migrate
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from generator import map_generator
+from example_bot import make_choice
 
 app = Flask(__name__, instance_path="/home/dmitry/PycharmProjects/capture-the-flag/instance")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./database.db'
@@ -16,22 +18,17 @@ migrate = Migrate(app, db)
 
 
 class User(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(100))
-    username = db.Column(db.String(50), nullable=False, unique=True)
-    email = db.Column(db.String(100), nullable=False, unique=True)
-    password_hash = db.Column(db.String(100), nullable=False)
-    created_on = db.Column(db.DateTime(), default=datetime.utcnow)
+    # ...
     updated_on = db.Column(db.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    def as_dict(self):
-        return {
-            "id": self.id,
-            "username": self.username
-        }
 
     def __repr__(self):
         return "<{}:{}>".format(self.id, self.username)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 class Player(db.Model):
@@ -109,10 +106,6 @@ class Bullet(db.Model):
             "side": self.side,
             "speed": self.side
         }
-
-
-
-
 
 
 @app.route('/')
@@ -200,6 +193,7 @@ def add_player(base_id):
     new_player = Player()
     new_player.base = bases[base_id]
     new_player.key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+    new_player.code = make_choice()
     new_player.x = bases[base_id].x
     new_player.y = bases[base_id].y
     db.session.add(new_player)
@@ -219,6 +213,7 @@ def apply_caching(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
+
 def get_state():
     users = list(User.query.all())
     players = list(Player.query.all())
@@ -236,9 +231,11 @@ def get_state():
         "height": 32
     }
 
+
 @app.route('/api/state')
 def web_get_state():
     return jsonify(get_state())
+
 
 if __name__ == "__main__":
     app.run(HOST, PORT, debug=DEBUG)
