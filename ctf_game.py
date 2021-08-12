@@ -120,6 +120,10 @@ if __name__ == "__main__":
 
                 if is_it_an_object(player.x, player.y, "flag"):
                     player.has_flag = True
+                if is_it_an_object(player.x, player.y, "medkit") and (player.hp < 3):
+                    player.hp += 1
+                if is_it_an_object(player.x, player.y, "ammo"):
+                    player.bullets += 6
 
                 if choices[player.id] == "fire_up":
                     bullet_launch(player, "up")

@@ -53,7 +53,7 @@ class Player(db.Model):
     key = db.Column(db.String(32), unique=True, nullable=True)
     code = db.Column(db.Text, nullable=True)
     hp = db.Column(db.Integer, nullable=False, default=3)
-    bullets = db.Column(db.Integer, nullable=False, default=99)
+    bullets = db.Column(db.Integer, nullable=False, default=9999)
     has_flag = db.Column(db.Boolean, nullable=False, default=False)
     x = db.Column(db.Integer, nullable=True, default=0)
     y = db.Column(db.Integer, nullable=True, default=0)
@@ -211,6 +211,7 @@ def add_player(base_id):
     new_player.base = bases[base_id]
     new_player.key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
     new_player.code = open('examples/example_bot.py').read()
+    new_player.bullets = 9999
     new_player.x = bases[base_id].x
     new_player.y = bases[base_id].y
     db.session.add(new_player)
