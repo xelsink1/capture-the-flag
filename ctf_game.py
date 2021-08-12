@@ -64,12 +64,12 @@ def bullet_launch(player1, side):
         if bullet.side == "left":
             bullet.y -= 1
         time.sleep(0.5)
-        wall = is_it_an_object(bullet.x, bullet.y, "wall")
-        if wall:
-            wall["hp"] -= 1
-        play = is_it_an_object(bullet.x, bullet.y, "wall")
-        if play:
-            play["hp"] -= 1
+    wall = is_it_an_object(bullet.x, bullet.y, "wall")
+    if wall:
+        wall["hp"] -= 1
+    play = is_it_an_object(bullet.x, bullet.y, "wall")
+    if play:
+        play["hp"] -= 1
 
 
 if __name__ == "__main__":
@@ -111,10 +111,6 @@ if __name__ == "__main__":
 
                 if is_it_an_object(player.x, player.y, "flag"):
                     player.has_flag = True
-                if choices[player.id] == "fire_up":
-                    wall = is_it_an_object(player.x, (player.y - 1), "wall")
-                    if wall:
-                        wall["hp"] -= 1
 
                 if choices[player.id] == "fire_up":
                     bullet_launch(player, "up")
