@@ -96,6 +96,7 @@ if __name__ == "__main__":
                     db.session.delete(bullet)
 
                 play = is_it_a_player(bullet.x, bullet.y)
+
                 if play:
                     play["hp"] -= 1
                     db.session.delete(bullet)
@@ -122,8 +123,10 @@ if __name__ == "__main__":
                     player.has_flag = True
                 if is_it_an_object(player.x, player.y, "medkit") and (player.hp < 3):
                     player.hp += 1
+                    db.session.delete(is_it_an_object(player.x, player.y, "medkit"))
                 if is_it_an_object(player.x, player.y, "ammo"):
                     player.bullets += 6
+                    db.session.delete(is_it_an_object(player.x, player.y, "medkit"))
 
                 if choices[player.id] == "fire_up":
                     bullet_launch(player, "up")
