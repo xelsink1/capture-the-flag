@@ -212,7 +212,7 @@ def add_player(base_id):
     new_player = Player()
     new_player.base = bases[base_id]
     new_player.key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-    new_player.code = make_choice()
+    new_player.code = make_choice(1, 1)
     new_player.x = bases[base_id].x
     new_player.y = bases[base_id].y
     db.session.add(new_player)
