@@ -91,7 +91,7 @@ function game_loop_iteration() {
         drawBase(base['x'], base['y'], base['id'])
     })
     data['bullets'].forEach((bullet) => {
-        drawBase(bullet['x'], bullet['y'], bullet['side'])
+        drawBullet(bullet['x'], bullet['y'], bullet['side'])
     })
     data['players'].forEach((player) => {
         drawPlayer(player['x'], player['y'], player['side'], player['has_flag'])
