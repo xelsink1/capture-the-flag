@@ -13,7 +13,6 @@ images.grass = new Image();
 images.grass.src = "/static/res/grass_new.jpg";
 
 
-
 images.flag = new Image();
 images.flag.src = "/static/res/flag.png"
 
@@ -69,7 +68,7 @@ function drawGrass() {
         }
     }
 }
-
+// обновление кадров игры
 function game_loop_iteration() {
     if (!data) return
     drawGrass()
@@ -88,11 +87,14 @@ function game_loop_iteration() {
             drawAmmo(object['x'], object['y'])
         }
     })
-    data['players'].forEach((player) => {
-        drawPlayer(player['x'], player['y'], player['side'], player['has_flag'])
-    })
     data['bases'].forEach((base) => {
         drawBase(base['x'], base['y'], base['id'])
+    })
+    data['bullets'].forEach((bullet) => {
+        drawBase(bullet['x'], bullet['y'], bullet['side'])
+    })
+    data['players'].forEach((player) => {
+        drawPlayer(player['x'], player['y'], player['side'], player['has_flag'])
     })
 }
 
@@ -135,34 +137,34 @@ function drawAmmo(x, y) {
 
 function drawPlayer(x, y, side, has_flag) {
     ctx.drawImage(images.player_UP, x * 30, y * 30, 30, 30)
-    // if (has_flag == true) {
-    //     if (side == "up") {
-    //         return ctx.drawImage(images.player_UP_hasF, x * 30, y * 30, 30, 30)
-    //     }
-    //     if (side == "down") {
-    //         return ctx.drawImage(images.player_DOWN_hasF, x * 30, y * 30, 30, 30)
-    //     }
-    //     if (side == "left") {
-    //         return ctx.drawImage(images.player_LEFT_hasF, x * 30, y * 30, 30, 30)
-    //     }
-    //     if (side == "right") {
-    //         return ctx.drawImage(images.player_RIGHT_hasF, x * 30, y * 30, 30, 30)
-    //     }
-    // }
-    // if (has_flag == false) {
-    //     if (side == "up") {
-    //         return ctx.drawImage(images.player_UP, x * 30, y * 30, 30, 30)
-    //     }
-    //     if (side == "down") {
-    //         return ctx.drawImage(images.player_DOWN, x * 30, y * 30, 30, 30)
-    //     }
-    //     if (side == "left") {
-    //         return ctx.drawImage(images.player_LEFT, x * 30, y * 30, 30, 30)
-    //     }
-    //     if (side == "right") {
-    //         return ctx.drawImage(images.player_RIGHT, x * 30, y * 30, 30, 30)
-    //     }
-    // }
+    if (has_flag == true) {
+        if (side == "up") {
+            return ctx.drawImage(images.player_UP_hasF, x * 30, y * 30, 30, 30)
+        }
+        if (side == "down") {
+            return ctx.drawImage(images.player_DOWN_hasF, x * 30, y * 30, 30, 30)
+        }
+        if (side == "left") {
+            return ctx.drawImage(images.player_LEFT_hasF, x * 30, y * 30, 30, 30)
+        }
+        if (side == "right") {
+            return ctx.drawImage(images.player_RIGHT_hasF, x * 30, y * 30, 30, 30)
+        }
+    }
+    if (has_flag == false) {
+        if (side == "up") {
+            return ctx.drawImage(images.player_UP, x * 30, y * 30, 30, 30)
+        }
+        if (side == "down") {
+            return ctx.drawImage(images.player_DOWN, x * 30, y * 30, 30, 30)
+        }
+        if (side == "left") {
+            return ctx.drawImage(images.player_LEFT, x * 30, y * 30, 30, 30)
+        }
+        if (side == "right") {
+            return ctx.drawImage(images.player_RIGHT, x * 30, y * 30, 30, 30)
+        }
+    }
 
 }
 
