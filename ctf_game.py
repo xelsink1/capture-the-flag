@@ -92,7 +92,7 @@ if __name__ == "__main__":
                 if wall:
                     wall["hp"] -= 1
                     if wall["hp"] == 0:
-                        db.session.delete(wall)
+                        db.session.delete(objects[wall])
                     db.session.delete(bullet)
 
                 play = is_it_a_player(bullet.x, bullet.y)
