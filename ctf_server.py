@@ -41,7 +41,7 @@ class User(db.Model):
     '''manager = Manager(app)
     manager.add_command('db', MigrateCommand)
     db = SQLAlchemy(app)
-    migrate = Migrate(app, db)e
+    migrate = Migrate(app, db)
     mail = Mail(app)
     login_manager = LoginManager(app)
 '''
@@ -197,6 +197,7 @@ def add_object(hype, x, y):
     db.session.commit()
 
 
+# @app.route('/test/add_base')
 def add_base(x, y, color):
     new_base = Base()
     new_base.x = x
@@ -211,7 +212,7 @@ def web_add_player():
     bases = Base.query.all()
 
     for base in bases:
-        if not base.players:
+        if len(base.players) == 0:
             add_player(base.id)
             return "ok"
 

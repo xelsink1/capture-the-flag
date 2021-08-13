@@ -8,20 +8,14 @@ images.stone_2hp.src = "/static/res/stone_2hp.png";
 images.stone_1hp = new Image();
 images.stone_1hp.src = "/static/res/stone_1hp.png";
 
-
 images.grass = new Image();
 images.grass.src = "/static/res/grass_new.jpg";
-
-
 images.flag = new Image();
 images.flag.src = "/static/res/flag.png"
-
 images.medkit = new Image();
 images.medkit.src = "/static/res/medkit.png"
-
 images.ammo = new Image();
 images.ammo.src = "/static/res/ammo.png"
-
 
 images.base_UKR = new Image();
 images.base_UKR.src = "/static/res/UKR.png";
@@ -48,8 +42,6 @@ images.player_RIGHT = new Image();
 images.player_RIGHT.src = "/static/res/player_RIGHT.jpg";
 images.player_LEFT = new Image();
 images.player_LEFT.src = "/static/res/player_LEFT.jpg";
-
-
 
 images.bullet_UP = new Image();
 images.bullet_UP.src = "/static/res/bullet_UP.png";
@@ -95,6 +87,10 @@ function game_loop_iteration() {
     })
     data['players'].forEach((player) => {
         drawPlayer(player['x'], player['y'], player['side'], player['has_flag'])
+    })
+
+    data['players'].forEach((player) =>{
+        drawInventory(player['bullets'], player['base'], player['hp'], player['has_flag'])
     })
 }
 
@@ -165,7 +161,6 @@ function drawPlayer(x, y, side, has_flag) {
             return ctx.drawImage(images.player_RIGHT, x * 30, y * 30, 30, 30)
         }
     }
-
 }
 
 function drawBullet(x, y, side) {
@@ -194,5 +189,11 @@ function update_map() {
         console.log(data)
     });
 }
+
+
+function drawInventory(bullets, base, hp, has_flag){
+    return bullets, base, hp, has_flag  
+}
+
 
 setInterval(update_map, 1000)
