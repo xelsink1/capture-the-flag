@@ -17,6 +17,15 @@ def get_choice(player, state):
         print(e)
         return None
 
+def is_it_a_base(x, y, player):
+    state1 = get_state()
+    bases = state1["bases"]
+    for base in bases:
+        if (base["y"] == y) and (base["x"] == x) and (player.base == base):
+            return base
+
+    return None
+
 
 def is_it_a_player(x, y):
     state1 = get_state()
@@ -27,12 +36,10 @@ def is_it_a_player(x, y):
     return None
 
 
-def is_it_an_object(x, y, hype):
-    state1 = get_state()
-    objects1 = state1["objects"]
-    for obj in objects1:
-        if (obj["y"] == y) and (obj["x"] == x) and (obj["type"] == hype):
-            return obj
+def is_it_an_object(x, y, hype, objects):
+    intercept = list(filter(lambda obj: obj.x == x and obj.y == y and obj.type == hype, objects))
+    if len(intercept) != 0:
+        return intercept[0]
     return None
 
 
@@ -115,30 +122,33 @@ if __name__ == "__main__":
 
             for player in active_players:
                 if choices[player.id] == "go_up":
-                    if not is_it_an_object(player.x, (player.y - 1), "wall") and (player.y > 0):
+                    if not is_it_an_object(player.x, (player.y - 1), "wall", objects) and (player.y > 0):
                         player.y -= 1
                     player.side = "up"
                 if choices[player.id] == "go_down":
-                    if not is_it_an_object(player.x, (player.y + 1), "wall") and (player.y < 32):
+                    if not is_it_an_object(player.x, (player.y + 1), "wall", objects) and (player.y < 32):
                         player.y += 1
                     player.side = "down"
                 if choices[player.id] == "go_left":
-                    if not is_it_an_object((player.x - 1), player.y, "wall") and (player.x > 0):
+                    if not is_it_an_object((player.x - 1), player.y, "wall", objects) and (player.x > 0):
                         player.x -= 1
                     player.side = "left"
                 if choices[player.id] == "go_right":
-                    if not is_it_an_object((player.x + 1), player.y, "wall") and (player.x < 32):
+                    if not is_it_an_object((player.x + 1), player.y, "wall", objects) and (player.x < 32):
                         player.x += 1
                     player.side = "right"
 
-                if is_it_an_object(player.x, player.y, "flag"):
+                if is_it_an_object(player.x, player.y, "flag", objects):
                     player.has_flag = True
-                if is_it_an_object(player.x, player.y, "medkit") and (player.hp < 3):
+                    db.session.delete(is_it_an_object(player.x, player.y, "flag", objects))
+                if is_it_an_object(player.x, player.y, "medkit", objects) and (player.hp < 3):
                     player.hp += 1
-                    db.session.delete(is_it_an_object(player.x, player.y, "medkit"))
-                if is_it_an_object(player.x, player.y, "ammo"):
+                    db.session.delete(is_it_an_object(player.x, player.y, "medkit", objects))
+                if is_it_an_object(player.x, player.y, "ammo", objects):
                     player.bullets += 6
-                    db.session.delete(is_it_an_object(player.x, player.y, "medkit"))
+                    db.session.delete(is_it_an_object(player.x, player.y, "ammo", objects))
+                # if is_it_a_base(player.x, player.y, player):
+                #     break
 
                 if choices[player.id] == "fire_up":
                     bullet_launch(player, "up")

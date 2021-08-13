@@ -17,49 +17,49 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 
-class User(db.Model):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(100))
-    username = db.Column(db.String(50), nullable=False, unique=True)
-    email = db.Column(db.String(100), nullable=False, unique=True)
-    password_hash = db.Column(db.String(100), nullable=False)
-    created_on = db.Column(db.DateTime(), default=datetime.utcnow)
-    updated_on = db.Column(db.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow)
-    app = Flask(__name__)
-    app.debug = True
-    app.config['SECRET_KEY'] = 'a really really really really long secret key'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pass@localhost/flask_app_db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
-    app.config['MAIL_PORT'] = 587
-    app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USERNAME'] = 'youmail@gmail.com'
-    app.config['MAIL_DEFAULT_SENDER'] = 'youmail@gmail.com'
-    app.config['MAIL_PASSWORD'] = 'password'
+# class User(db.Model):
+#     __tablename__ = 'users'
+#     id = db.Column(db.Integer(), primary_key=True)
+#     name = db.Column(db.String(100))
+#     username = db.Column(db.String(50), nullable=False, unique=True)
+#     email = db.Column(db.String(100), nullable=False, unique=True)
+#     password_hash = db.Column(db.String(100), nullable=False)
+#     created_on = db.Column(db.DateTime(), default=datetime.utcnow)
+#     updated_on = db.Column(db.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow)
+#     app = Flask(__name__)
+#     app.debug = True
+#     app.config['SECRET_KEY'] = 'a really really really really long secret key'
+#     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pass@localhost/flask_app_db'
+#     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#     app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+#     app.config['MAIL_PORT'] = 587
+#     app.config['MAIL_USE_TLS'] = True
+#     app.config['MAIL_USERNAME'] = 'youmail@gmail.com'
+#     app.config['MAIL_DEFAULT_SENDER'] = 'youmail@gmail.com'
+#     app.config['MAIL_PASSWORD'] = 'password'
+#
+#     '''manager = Manager(app)
+#     manager.add_command('db', MigrateCommand)
+#     db = SQLAlchemy(app)
+#     migrate = Migrate(app, db)e
+#     mail = Mail(app)
+#     login_manager = LoginManager(app)
+# '''
 
-    '''manager = Manager(app)
-    manager.add_command('db', MigrateCommand)
-    db = SQLAlchemy(app)
-    migrate = Migrate(app, db)e
-    mail = Mail(app)
-    login_manager = LoginManager(app)
-'''
-
-    def __repr__(self):
-        return "<{}:{}>".format(self.id, self.username)
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-    def as_dict(self):
-        return {
-            "id": self.id,
-            "username": self.username
-        }
+    # def __repr__(self):
+    #     return "<{}:{}>".format(self.id, self.username)
+    #
+    # def set_password(self, password):
+    #     self.password_hash = generate_password_hash(password)
+    #
+    # def check_password(self, password):
+    #     return check_password_hash(self.password_hash, password)
+    #
+    # def as_dict(self):
+    #     return {
+    #         "id": self.id,
+    #         "username": self.username
+    #     }
 
 
 class Player(db.Model):
@@ -209,13 +209,12 @@ def add_base(x, y, color):
 @app.route('/test/add_player')
 def web_add_player():
     bases = Base.query.all()
+    Player.query.delete()
 
     for base in bases:
-        if not base.players:
             add_player(base.id)
-            return "ok"
 
-    return "no base"
+    return "ok"
 
 
 def add_player(base_id):
@@ -246,14 +245,14 @@ def apply_caching(response):
 
 
 def get_state():
-    users = list(User.query.all())
+    # users = list(User.query.all())
     players = list(Player.query.all())
     objects = list(Object.query.all())
     bases = list(Base.query.all())
     bullets = list(Bullet.query.all())
 
     return {
-        "users": [user.as_dict() for user in users],
+        # "users": [user.as_dict() for user in users],
         "players": [player.as_dict() for player in players],
         "objects": [object1.as_dict() for object1 in objects],
         "bases": [base.as_dict() for base in bases],
