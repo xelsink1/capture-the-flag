@@ -6,6 +6,8 @@ from flask import Flask, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from config import *
 from flask_migrate import Migrate
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager
 
 from generator import map_generator
 
@@ -16,6 +18,7 @@ migrate = Migrate(app, db)
 
 
 class User(db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(100))
     username = db.Column(db.String(50), nullable=False, unique=True)
@@ -23,20 +26,25 @@ class User(db.Model):
     password_hash = db.Column(db.String(100), nullable=False)
     created_on = db.Column(db.DateTime(), default=datetime.utcnow)
     updated_on = db.Column(db.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow)
+    app = Flask(__name__)
+    app.debug = True
+    app.config['SECRET_KEY'] = 'a really really really really long secret key'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pass@localhost/flask_app_db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+    app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USERNAME'] = 'youmail@gmail.com'
+    app.config['MAIL_DEFAULT_SENDER'] = 'youmail@gmail.com'
+    app.config['MAIL_PASSWORD'] = 'password'
 
-    def as_dict(self):
-        return {
-            "id": self.id,
-            "username": self.username
-        }
-
-    def __repr__(self):
-        return "<{}:{}>".format(self.id, self.username)
-
-
-'''class User(db.Model):
-    # ...
-    updated_on = db.Column(db.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow)
+    '''manager = Manager(app)
+    manager.add_command('db', MigrateCommand)
+    db = SQLAlchemy(app)
+    migrate = Migrate(app, db)
+    mail = Mail(app)
+    login_manager = LoginManager(app)
+'''
 
     def __repr__(self):
         return "<{}:{}>".format(self.id, self.username)
@@ -45,7 +53,13 @@ class User(db.Model):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
-        return check_password_hash(self.password_hash, password)'''
+        return check_password_hash(self.password_hash, password)
+
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "username": self.username
+        }
 
 
 class Player(db.Model):

@@ -1,6 +1,6 @@
 import time
 import importlib
-from ctf_server import app, Player, Bullet, get_state, db
+from ctf_server import app, Player, Bullet, get_state, db, Object
 
 available_choices = ["go_up", "go_down", "go_right", "go_left", "fire_up", "fire_down", "fire_right", "fire_left"]
 
@@ -54,9 +54,42 @@ def bullet_launch(player1, side):
             bullet.x = player1.x - 1
             bullet.y = player1.y
         db.session.add(bullet)
-        db.session.commit()
     else:
         return None
+
+
+def bullet_move(bullets, objects, players):
+
+    for bullet in bullets:
+        intercept = list(filter(lambda obj: obj.x == bullet.x and obj.y == bullet.y, objects))
+        for obj in intercept:
+            if obj.type == "wall":
+                obj.hp -= 1
+                if obj.hp == 0:
+                    db.session.delete(obj)
+                db.session.delete(bullet)
+        intercept2 = list(filter(lambda play: play.x == bullet.x and play.y == bullet.y, players))
+        for play in intercept2:
+            play.hp -= 1
+            if play.hp == 0:
+                db.session.delete(play)
+            db.session.delete(bullet)
+        if bullet.side == "up":
+            bullet.y -= 1
+        if bullet.side == "down":
+            bullet.y += 1
+        if bullet.side == "right":
+            bullet.x += 1
+        if bullet.side == "left":
+            bullet.x -= 1
+
+
+
+
+        # play = is_it_a_player(bullet.x, bullet.y)
+        # if play:
+        #     play["hp"] -= 1
+        #     db.session.delete(bullet)
 
 
 if __name__ == "__main__":
@@ -72,34 +105,13 @@ if __name__ == "__main__":
         while True:
             state = get_state()
             choices = {}
-            objects = state["objects"]
+            objects = Object.query.all()
             bullets = Bullet.query.all()
 
             for player in active_players:
                 choices[player.id] = get_choice(player, state)
 
-            for bullet in bullets:
-                while not is_it_an_object(bullet.x, bullet.y, "wall") and not is_it_a_player(bullet.x, bullet.y):
-                    if bullet.side == "up":
-                        bullet.y -= 1
-                    if bullet.side == "down":
-                        bullet.y += 1
-                    if bullet.side == "right":
-                        bullet.x += 1
-                    if bullet.side == "left":
-                        bullet.y -= 1
-                wall = is_it_an_object(bullet.x, bullet.y, "wall")
-                if wall:
-                    wall["hp"] -= 1
-                    if wall["hp"] == 0:
-                        db.session.delete(objects[wall])
-                    db.session.delete(bullet)
-
-                play = is_it_a_player(bullet.x, bullet.y)
-
-                if play:
-                    play["hp"] -= 1
-                    db.session.delete(bullet)
+            bullet_move(bullets, objects, players)
 
             for player in active_players:
                 if choices[player.id] == "go_up":
