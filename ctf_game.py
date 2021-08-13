@@ -66,7 +66,6 @@ def bullet_launch(player1, side):
 
 
 def bullet_move(bullets, objects, players):
-
     for bullet in bullets:
         intercept = list(filter(lambda obj: obj.x == bullet.x and obj.y == bullet.y, objects))
         for obj in intercept:
@@ -89,9 +88,6 @@ def bullet_move(bullets, objects, players):
             bullet.x += 1
         if bullet.side == "left":
             bullet.x -= 1
-
-
-
 
         # play = is_it_a_player(bullet.x, bullet.y)
         # if play:
