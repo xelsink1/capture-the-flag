@@ -2,8 +2,10 @@ from datetime import datetime
 import random
 import string
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.utils import redirect
+
 from config import *
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -139,7 +141,7 @@ class Bullet(db.Model):
         }
 
 
-@app.route('/')
+@app.route('/game')
 def index():
     return render_template("game.html")
 
@@ -167,7 +169,7 @@ def init_map():
                 add_object("ammo", i, j)
             elif m[i][j] == "B":
                 add_base(i, j, random.choice(["#00FF00", "#FF0000", "#0000FF", "#FFFF00"]))
-    return "heh"
+    return render_template("map_generation.html")
 
 
 # def add_code(player_id):
@@ -205,6 +207,31 @@ def add_base(x, y, color):
     db.session.add(new_base)
     db.session.commit()
 
+@app.route('/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        init_map()
+
+        codes = []
+
+        codes.append(request.form.get('code1'))
+        codes.append(request.form.get('code2'))
+        codes.append(request.form.get('code3'))
+        codes.append(request.form.get('code4'))
+        bases = Base.query.all()
+
+        for base in bases:
+            new_player = Player()
+            new_player.base = base
+            new_player.key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+            new_player.code = codes.pop()
+            new_player.bullets = 9999
+            new_player.x = base.x
+            new_player.y = base.y
+            db.session.add(new_player)
+        db.session.commit()
+        return redirect('/game')
+    return render_template("bots.html")
 
 @app.route('/test/add_player')
 def web_add_player():
@@ -212,17 +239,17 @@ def web_add_player():
     Player.query.delete()
 
     for base in bases:
-            add_player(base.id)
+            add_player(base.id, open('examples/example_bot.py').read())
 
     return "ok"
 
 
-def add_player(base_id):
+def add_player(base_id, code):
     bases = Base.query.all()
     new_player = Player()
     new_player.base = bases[base_id]
     new_player.key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-    new_player.code = open('examples/example_bot.py').read()
+    new_player.code = code
     new_player.bullets = 9999
     new_player.x = bases[base_id].x
     new_player.y = bases[base_id].y
