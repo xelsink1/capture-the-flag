@@ -115,7 +115,7 @@ if __name__ == "__main__":
 
             for player in active_players:
                 if choices[player.id] == "go_up":
-                    if not is_it_an_object(player.x, (player.y - 1), "wall") and (player.y != 0):
+                    if not is_it_an_object(player.x, (player.y - 1), "wall") and (player.y > 0):
                         player.y -= 1
                     player.side = "up"
                 if choices[player.id] == "go_down":
@@ -123,7 +123,7 @@ if __name__ == "__main__":
                         player.y += 1
                     player.side = "down"
                 if choices[player.id] == "go_left":
-                    if not is_it_an_object((player.x - 1), player.y, "wall") and (player.x != 0):
+                    if not is_it_an_object((player.x - 1), player.y, "wall") and (player.x > 0):
                         player.x -= 1
                     player.side = "left"
                 if choices[player.id] == "go_right":

@@ -52,7 +52,7 @@ images.player_LEFT.src = "/static/res/player_LEFT.jpg";
 
 
 images.bullet_UP = new Image();
-images.bullet_UP.src = "/static/res/bullet_UP.png"
+images.bullet_UP.src = "/static/res/bullet_UP.png";
 images.bullet_DOWN = new Image();
 images.bullet_DOWN.src = "/static/res/bullet_DOWN.png";
 images.bullet_RIGHT = new Image();
