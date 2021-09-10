@@ -285,7 +285,8 @@ def get_state():
         "bases": [base.as_dict() for base in bases],
         "bullets": [bullet.as_dict() for bullet in bullets],
         "width": 32,
-        "height": 32
+        "height": 32,
+        "game": "running"
     }
 
 

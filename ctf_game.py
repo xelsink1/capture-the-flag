@@ -17,6 +17,7 @@ def get_choice(player, state):
         print(e)
         return None
 
+
 def is_it_a_base(x, y, player):
     state1 = get_state()
     bases = state1["bases"]
@@ -143,8 +144,8 @@ if __name__ == "__main__":
                 if is_it_an_object(player.x, player.y, "ammo", objects):
                     player.bullets += 6
                     db.session.delete(is_it_an_object(player.x, player.y, "ammo", objects))
-                # if is_it_a_base(player.x, player.y, player):
-                #     break
+                if is_it_a_base(player.x, player.y, player) and player.has_flag:
+                     state["game"] = "over"
 
                 if choices[player.id] == "fire_up":
                     bullet_launch(player, "up")
